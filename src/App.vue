@@ -1,17 +1,27 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <b-container fluid class="main-container">
+      <b-row>
+        <b-col md="8">
+          <graph-layout />
+        </b-col>
+        <b-col md="4" class="option-panel">
+          <option-panel />
+        </b-col>
+      </b-row>
+    </b-container>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import GraphLayout from '@/components/GraphLayout.vue';
+import OptionPanel from '@/components/OptionPanel.vue';
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    GraphLayout,
+    OptionPanel
   }
 }
 </script>
@@ -21,8 +31,20 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  height: 100vh;
+  position: relative;
+  overflow-y: auto;
+}
+.main-container {
+  height: 100%;
+
+  .row {
+    height: 100%;
+  }
+
+  .option-panel {
+    padding-right: 0;
+  }
 }
 </style>
