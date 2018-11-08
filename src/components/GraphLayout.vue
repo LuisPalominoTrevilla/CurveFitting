@@ -1,7 +1,7 @@
 <template>
     <div style="height: 100%">
         <div class="file-upload">
-            <file-upload-panel/>
+            <file-upload-panel @assignPoints="setPoints($event)"/>
         </div>
         <div class="graph">
             <div id="graph" ref="grf"></div>
@@ -11,8 +11,9 @@
 
 <script>
 import FileUploadPanel from '@/components/FileUploadPanel.vue';
-import { functionPlot } from '@/modules/function.conf.js';
-import { configPlot } from '@/modules/constants.json';
+import DiscreteFunction from '@/modules/DiscreteFunction';
+import { functionPlot } from '@/function.conf.js';
+import { configPlot, configPoints, ghostFunc } from '@/graph.config.json';
 
 export default {
     name: "graph",
@@ -23,7 +24,7 @@ export default {
     
     data() {
         return {
-
+            points: null
         }
     },
 
@@ -38,14 +39,31 @@ export default {
     },
 
     mounted() {
-        configPlot.width = this.width;
-        configPlot.height = this.height;
-        functionPlot(configPlot)
+        this.resetGraph();
     },
 
     methods: {
         handleResize() {
-            console.log("Wadap");
+
+        },
+
+        resetGraph() {
+            configPlot.width = this.width;
+            configPlot.height = this.height;
+            configPlot.data = [ghostFunc];
+            functionPlot(configPlot);
+        },
+
+        setPoints(points) {
+            this.points = new DiscreteFunction(points);
+            this.drawPoints();
+        },
+
+        drawPoints() {
+            this.resetGraph();
+            configPoints.points = this.points.formattedPoints;
+            configPlot.data.push(configPoints);
+            functionPlot(configPlot);
         }
     }
 }
