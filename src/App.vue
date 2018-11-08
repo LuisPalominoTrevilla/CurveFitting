@@ -2,7 +2,7 @@
   <div id="app">
     <b-container fluid class="main-container">
       <b-row>
-        <b-col md="8">
+        <b-col md="8" class="graph-panel">
           <graph-layout />
         </b-col>
         <b-col md="4" class="option-panel">
@@ -44,7 +44,7 @@ export default {
   }
 
   .option-panel {
-    padding-right: 0;
+    padding: 0;
   }
 }
 </style>
