@@ -1,4 +1,4 @@
-export default class Matrix {
+module.exports = class Matrix {
 
     /* CONSTRUCTORS */
 
@@ -107,5 +107,39 @@ export default class Matrix {
             }
             console.log(row);
         }
+    }
+
+    deleteColumn(colNo) {
+      var newMat = new Array((this.n-1)*this.m);
+      var k = 0;
+
+      for(var i = 0; i < this.n; i++) {
+        if(i != colNo) {
+          for(var j = 0; j < this.m; j++) {
+            newMat[j * (this.n - 1) + k] = this.getElement(j, i);
+          }
+          k++;
+        }
+      }
+
+      this.n--;
+      this.matrix = newMat;
+    }
+
+    deleteRow(rowNo) {
+      var newMat = new Array((this.m-1)*this.n);
+      var k = 0;
+
+      for(var i = 0; i < this.m; i++) {
+        if(i != rowNo) {
+          for(var j = 0; j < this.n; j++) {
+            newMat[k * (this.m - 1) + j] = this.getElement(i, j);
+          }
+          k++;
+        }
+      }
+
+      this.m--;
+      this.matrix = newMat;
     }
 }
