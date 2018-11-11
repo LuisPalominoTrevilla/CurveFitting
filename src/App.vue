@@ -3,14 +3,13 @@
     <b-container fluid class="main-container">
       <b-row>
         <b-col md="8" class="graph-panel">
-          <graph-layout 
-            :type="type"
-            :enabled="enabled"
-            @confirmPoints="confirmPoints()"/>
+          <graph-layout
+            @confirmPoints="confirmPoints()"
+            ref="childGraph"/>
         </b-col>
         <b-col md="4" class="option-panel">
           <option-panel 
-            @graphPolinomial="graphPolinomial($event)"
+            @newGraph="newGraph($event)"
             :btnActive="hasPoints"/>
         </b-col>
       </b-row>
@@ -21,7 +20,6 @@
 <script>
 import GraphLayout from '@/components/GraphLayout.vue';
 import OptionPanel from '@/components/OptionPanel.vue';
-import { tipo } from './constants.json';
 
 export default {
   name: 'app',
@@ -33,16 +31,13 @@ export default {
 
   data() {
     return {
-      enabled: [],
-      type: tipo.Indefinido,
       hasPoints: false
     }
   },
 
   methods: {
-    graphPolinomial({ enabled, type }) {
-      this.enabled = enabled;
-      this.type = tipo[type];
+    newGraph(options) {
+      this.$refs.childGraph.newRegression(options);
     },
 
     confirmPoints() {

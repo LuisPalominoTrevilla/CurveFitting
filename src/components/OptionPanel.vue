@@ -6,7 +6,7 @@
                 <b-form @submit="makeRegresion">
                     <b-card no-body>
                         <b-tabs pills card vertical>
-                            <b-tab title="Polinomial" @click="selectRegression(0)">
+                            <b-tab title="Polinomial `a_0+a_1x+...+a_nx^n`" @click="selectRegression(0)">
                                 <b-form-group>
                                     <label for="pol-order">órden polinomio:</label>
                                     <b-input 
@@ -24,13 +24,81 @@
                                     </b-form-checkbox>
                                 </b-form-group>
                             </b-tab>
-                            <b-tab title="Transcendental" @click="selectRegression(1)">
-                                `x^2+ln(x)`
+                            <b-tab title="Transcendental `1/x^n`" @click="selectRegression(1)">
+                                <b-form-group>
+                                    <label for="trasc">Exponente de `1/x^n`:</label>
+                                    <b-input 
+                                        id="trasc" 
+                                        v-model="n"
+                                        type="number"/>
+                                </b-form-group>
+                                <b-form-group 
+                                    v-for="(n, index) in transLabels" 
+                                    :key="index">
+                                    <b-form-checkbox
+                                        v-model="stdSelections[index]"
+                                        :disabled="index == stdSelections.length-1">
+                                        `{{n}}`
+                                    </b-form-checkbox>
+                                </b-form-group>
                             </b-tab>
-                            <b-tab title="Logaritmica" @click="selectRegression(2)">
+                            <b-tab title="Exponencial `e^(kx)`" @click="selectRegression(2)">
                             Tab Contents 3
                             </b-tab>
-                            <b-tab title="Trigonometrica" @click="selectRegression(3)">
+                            <b-tab title="Logarítmica `log_bx`" @click="selectRegression(3)">
+                                <b-form-group>
+                                    <label for="log1-base">Base de `log_bx`:</label>
+                                    <b-input 
+                                        id="log1-base" 
+                                        v-model="base"
+                                        type="number"/>
+                                </b-form-group>
+                                <b-form-group 
+                                    v-for="(n, index) in logLabels" 
+                                    :key="index">
+                                    <b-form-checkbox
+                                        v-model="stdSelections[index]"
+                                        :disabled="index == stdSelections.length-1">
+                                        `{{n}}`
+                                    </b-form-checkbox>
+                                </b-form-group>
+                            </b-tab>
+                            <b-tab title="Logarítmica `lnx`" @click="selectRegression(4)">
+                                <b-form-group 
+                                    v-for="(n, index) in lnLabels" 
+                                    :key="index">
+                                    <b-form-checkbox
+                                        v-model="stdSelections[index]"
+                                        :disabled="index == stdSelections.length-1">
+                                        `{{n}}`
+                                    </b-form-checkbox>
+                                </b-form-group>
+                            </b-tab>
+                            <b-tab title="Logarítmica `nlog_bn`" @click="selectRegression(5)">
+                                <b-form-group>
+                                    <label for="log2-base">Base de `nlog_bn`:</label>
+                                    <b-input 
+                                        id="log2-base" 
+                                        v-model="base"
+                                        type="number"/>
+                                </b-form-group>
+                                <b-form-group 
+                                    v-for="(n, index) in nlogLabels" 
+                                    :key="index">
+                                    <b-form-checkbox
+                                        v-model="stdSelections[index]"
+                                        :disabled="index == stdSelections.length-1">
+                                        `{{n}}`
+                                    </b-form-checkbox>
+                                </b-form-group>
+                            </b-tab>
+                            <b-tab title="Trigonométrica `sinx`" @click="selectRegression(6)">
+                            Tab Contents 3
+                            </b-tab>
+                            <b-tab title="Trigonométrica `cosx`" @click="selectRegression(7)">
+                            Tab Contents 3
+                            </b-tab>
+                            <b-tab title="Trigonométrica `sinx+cosx`" @click="selectRegression(8)">
                             Tab Contents 3
                             </b-tab>
                         </b-tabs>
@@ -65,10 +133,18 @@ export default {
     data() {
         return {
             letters: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'],
+            selected: null,
             polOrder: null,
             polLabels: [],
             polSelections: [],
-            selected: null
+            lnLabels: [],
+            logLabels: [],
+            nlogLabels: [],
+            stdSelections: [],
+            transLabels: [],
+            base: 10,
+            n: 1
+            
         }
     },
 
@@ -83,6 +159,14 @@ export default {
     beforeMount() {
         this.polOrder = 1;
         this.selected = tipo.Polinomial;
+        // Initialize logarithmic options
+        for (let i = 0; i < 2; i++) {
+            this.stdSelections.push(true);
+            this.lnLabels.push((i > 0)? `${this.letters[this.polOrder-i]}lnx`:this.letters[this.polOrder-i]);
+            this.logLabels.push((i > 0)? `${this.letters[this.polOrder-i]}log_bx`:this.letters[this.polOrder-i]);
+            this.nlogLabels.push((i > 0)? `${this.letters[this.polOrder-i]}nlog_bn`:this.letters[this.polOrder-i]);
+            this.transLabels.push((i > 0)? `${this.letters[this.polOrder-i]}1/x^n`:this.letters[this.polOrder-i]);
+        }
     },
 
     watch: {
@@ -99,17 +183,55 @@ export default {
                 this.polSelections.push(true);
                 this.polLabels.push((i > 0)? `${this.letters[this.polOrder-i]}x^${i}`:this.letters[this.polOrder-i]);
             }
+        },
+
+        base() {
+            if (this.base > 20) {
+                this.base = 20;
+            }
+        },
+
+        n() {
+            if (this.n > 20) {
+                this.n = 20;
+            }
         }
     },
 
     methods: {
         makeRegresion(e) {
             e.preventDefault();
-            this.$emit('graphPolinomial', { enabled: this.polSelections.slice(0), type: this.selected })
+            switch(this.selected) {
+                case tipo.Polinomial:
+                    this.$emit('newGraph', { enabled: this.polSelections.slice(0), type: this.selected });
+                    break;
+                case tipo.Trascendental:
+                    this.$emit('newGraph', { enabled: this.stdSelections.slice(0), type: this.selected, n: this.n });
+                    break;
+                case tipo.Logaritmica:
+                    if (this.base > 1) {
+                        this.$emit('newGraph', { enabled: this.stdSelections.slice(0), type: this.selected, base: this.base });
+                    }
+                    break;
+                case tipo.lnx:
+                    this.$emit('newGraph', { enabled: this.stdSelections.slice(0), type: this.selected });
+                    break;
+                case tipo.NlogN:
+                    if (this.base > 1) {
+                        this.$emit('newGraph', { enabled: this.stdSelections.slice(0), type: this.selected, base: this.base });
+                    }
+                    break;
+
+            }
         },
 
         selectRegression(num) {
-            this.selected = tipo[num];
+            this.selected = num;
+            this.base = 10;
+            this.stdSelections = [];
+            for (let i = 0; i < 2; i++) {
+                this.stdSelections.push(true);
+            }
         }
     }
 }

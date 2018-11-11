@@ -15,20 +15,10 @@ import DiscreteFunction from '@/modules/DiscreteFunction';
 import Interpreter from '@/modules/Interpreter';
 import { functionPlot } from '@/function.conf.js';
 import { configPlot, configPoints, configFunc, ghostFunc } from '@/graph.config.json';
+import { tipo } from '@/constants.json';
 
 export default {
     name: "graph",
-
-    props: {
-        type: {
-            type: Number,
-            required: true
-        },
-        enabled: {
-            type: Array,
-            required: true
-        }
-    },
 
     components: {
         FileUploadPanel
@@ -46,13 +36,6 @@ export default {
         points() {
             this.$emit('confirmPoints');
             this.drawPoints();
-        },
-
-        enabled() {
-            if (this.points) {
-                const interpreter = new Interpreter(this.points);
-                this.graph = interpreter.createPolinomial(this.enabled.length-1, this.enabled);
-            }
         },
 
         graph() {
@@ -77,6 +60,31 @@ export default {
     },
 
     methods: {
+
+        newRegression({ enabled, type, base, n }) {
+            if (this.points) {
+                const interpreter = new Interpreter(this.points);
+                switch (type) {
+                    case tipo.Polinomial:
+                        this.graph = interpreter.createPolinomial(enabled.length-1, enabled);
+                        break;
+                    case tipo.Trascendental:
+                        this.graph = interpreter.createTrans(enabled, n);
+                        break;
+                    case tipo.Logaritmica:
+                        this.graph = interpreter.createLogarithm(enabled, type, base);
+                        break;
+                    case tipo.lnx:
+                        this.graph = interpreter.createLogarithm(enabled, type);
+                        break;
+                    case tipo.NlogN:
+                        this.graph = interpreter.createLogarithm(enabled, type, base);
+                        break;
+
+                }
+            }
+        },
+
         handleResize() {
 
         },

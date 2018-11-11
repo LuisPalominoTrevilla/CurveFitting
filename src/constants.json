@@ -1,13 +1,22 @@
 {
     "tipo": {
-        "Indefinido": -1,
         "Polinomial": 0,
         "Trascendental": 1,
-        "Logaritmica": 2,
-        "Trigonometrica": 3,
+        "Exponencial": 2,
+        "Logaritmica": 3,
+        "lnx": 4,
+        "NlogN": 5,
+        "Trigonometrica1": 6,
+        "Trigonometrica2": 7,
+        "Trigonometrica3": 8,
         "0": "Polinomial",
         "1": "Trascendental",
-        "2": "Logaritmica",
-        "3": "Trigonometrica"
+        "2": "Exponencial",
+        "3": "Logaritmica",
+        "4": "lnx",
+        "5": "NlogN",
+        "6": "Trigonometrica1",
+        "7": "Trigonometrica2",
+        "8": "Trigonometrica3"
     }
 }
