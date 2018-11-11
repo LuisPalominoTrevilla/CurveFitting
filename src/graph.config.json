@@ -6,7 +6,7 @@
         "grid": true,
         "xAxis": {
             "label": "eje x",
-            "domain": [-3, 18]
+            "domain": [-1, 18]
         },
         "yAxis": {
             "label": "eje y",

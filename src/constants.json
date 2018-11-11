@@ -1,0 +1,12 @@
+{
+    "tipo": {
+        "Polimonial": 0,
+        "Trascendental": 1,
+        "Logaritmica": 2,
+        "Trigonometrica": 3,
+        "0": "Polinomial",
+        "1": "Trascendental",
+        "2": "Logaritmica",
+        "3": "Trigonometrica"
+    }
+}
