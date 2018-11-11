@@ -3,10 +3,15 @@
     <b-container fluid class="main-container">
       <b-row>
         <b-col md="8" class="graph-panel">
-          <graph-layout />
+          <graph-layout 
+            :type="type"
+            :enabled="enabled"
+            @confirmPoints="confirmPoints()"/>
         </b-col>
         <b-col md="4" class="option-panel">
-          <option-panel />
+          <option-panel 
+            @graphPolinomial="graphPolinomial($event)"
+            :btnActive="hasPoints"/>
         </b-col>
       </b-row>
     </b-container>
@@ -16,12 +21,33 @@
 <script>
 import GraphLayout from '@/components/GraphLayout.vue';
 import OptionPanel from '@/components/OptionPanel.vue';
+import { tipo } from './constants.json';
 
 export default {
   name: 'app',
+
   components: {
     GraphLayout,
     OptionPanel
+  },
+
+  data() {
+    return {
+      enabled: [],
+      type: tipo.Indefinido,
+      hasPoints: false
+    }
+  },
+
+  methods: {
+    graphPolinomial({ enabled, type }) {
+      this.enabled = enabled;
+      this.type = tipo[type];
+    },
+
+    confirmPoints() {
+      this.hasPoints = true;
+    }
   }
 }
 </script>

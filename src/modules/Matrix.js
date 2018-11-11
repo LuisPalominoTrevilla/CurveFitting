@@ -1,4 +1,4 @@
-module.exports = class Matrix {
+export default class Matrix {
 
     /* CONSTRUCTORS */
 
@@ -32,7 +32,7 @@ module.exports = class Matrix {
         const matrix = new Matrix(this.m, this.n, this.matrix);
         let pivot = 0;
         let factor = 0;
-        let tol = 1.e-7;
+        let tol = 1.e-10;
         for (let i = 0; i < matrix.m; i++) {
             pivot = matrix.getElement(i, i);
 
@@ -127,15 +127,13 @@ module.exports = class Matrix {
     }
 
     deleteRow(rowNo) {
-      var newMat = new Array((this.m-1)*this.n);
-      var k = 0;
+      var newMat = [];
 
       for(var i = 0; i < this.m; i++) {
         if(i != rowNo) {
           for(var j = 0; j < this.n; j++) {
-            newMat[k * (this.m - 1) + j] = this.getElement(i, j);
+            newMat.push(this.getElement(i, j));
           }
-          k++;
         }
       }
 

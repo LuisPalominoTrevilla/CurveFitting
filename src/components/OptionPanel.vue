@@ -25,7 +25,7 @@
                                 </b-form-group>
                             </b-tab>
                             <b-tab title="Transcendental" @click="selectRegression(1)">
-                                
+
                             </b-tab>
                             <b-tab title="Logaritmica" @click="selectRegression(2)">
                             Tab Contents 3
@@ -36,7 +36,12 @@
                         </b-tabs>
                     </b-card>
                     <b-form-group class="text-right">
-                        <b-button class="adjust-btn" type="submit">Ajustar</b-button>
+                        <b-button 
+                            class="adjust-btn" 
+                            type="submit"
+                            :disabled="!btnActive">
+                                Ajustar
+                            </b-button>
                     </b-form-group>
                 </b-form>
             </b-col>
@@ -50,6 +55,13 @@ import { tipo } from '@/constants.json';
 export default {
     name: 'OptionsPanel',
 
+    props: {
+        btnActive: {
+            type: Boolean,
+            required: true
+        }
+    },
+
     data() {
         return {
             letters: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'],
@@ -62,7 +74,7 @@ export default {
     },
 
     beforeMount() {
-        this.polOrder = 3;
+        this.polOrder = 1;
         this.selected = tipo.Polinomial;
     },
 
@@ -83,7 +95,7 @@ export default {
     methods: {
         makeRegresion(e) {
             e.preventDefault();
-
+            this.$emit('graphPolinomial', { enabled: this.polSelections.slice(0), type: this.selected })
         },
 
         selectRegression(num) {

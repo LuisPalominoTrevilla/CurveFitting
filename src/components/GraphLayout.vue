@@ -12,11 +12,23 @@
 <script>
 import FileUploadPanel from '@/components/FileUploadPanel.vue';
 import DiscreteFunction from '@/modules/DiscreteFunction';
+import Interpreter from '@/modules/Interpreter';
 import { functionPlot } from '@/function.conf.js';
-import { configPlot, configPoints, ghostFunc } from '@/graph.config.json';
+import { configPlot, configPoints, configFunc, ghostFunc } from '@/graph.config.json';
 
 export default {
     name: "graph",
+
+    props: {
+        type: {
+            type: Number,
+            required: true
+        },
+        enabled: {
+            type: Array,
+            required: true
+        }
+    },
 
     components: {
         FileUploadPanel
@@ -24,7 +36,29 @@ export default {
     
     data() {
         return {
-            points: null
+            points: null,
+            graph: ''
+        }
+    },
+
+    watch: {
+
+        points() {
+            this.$emit('confirmPoints');
+            this.drawPoints();
+        },
+
+        enabled() {
+            if (this.points) {
+                const interpreter = new Interpreter(this.points);
+                this.graph = interpreter.createPolinomial(this.enabled.length-1, this.enabled);
+            }
+        },
+
+        graph() {
+            if (this.graph) {
+                this.drawGraph();
+            }
         }
     },
 
@@ -56,13 +90,23 @@ export default {
 
         setPoints(points) {
             this.points = new DiscreteFunction(points);
-            this.drawPoints();
         },
 
         drawPoints() {
             this.resetGraph();
             configPoints.points = this.points.formattedPoints;
             configPlot.data.push(configPoints);
+            this.redraw();
+        },
+
+        drawGraph() {
+            configFunc.fn = this.graph;
+            configPlot.data = [configFunc];
+            configPlot.data.push(configPoints);
+            this.redraw();
+        },
+
+        redraw() {
             functionPlot(configPlot);
         }
     }

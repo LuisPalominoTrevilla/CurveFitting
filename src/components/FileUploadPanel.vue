@@ -39,7 +39,7 @@ export default {
             for (const r of res) {
                 let point = r.split(/\s/g);
                 if (point.length == 2) {
-                    points.push(point.map(val => parseInt(val)));
+                    points.push(point.map(val => parseFloat(val)));
                 }
             }
             this.$emit('assignPoints', points);

@@ -1,18 +1,23 @@
-module.exports = class EqSystem {
+export default class EqSystem {
   constructor(matrix, enabled) {
     this.matrix = matrix;
     this.enabled = enabled;
   }
 
   solveSystem() {
-    var solvedMat = this.matrix.GaussJordan();
-    var cols = this.matrix.cols;
-    console.log(cols);
+    let solvedMat = this.matrix.GaussJordan();
+    if (!solvedMat) {
+      // eslint-disable-next-line
+      return this.enabled.map(item => {
+        return 0;
+      });
+    }
+    let cols = this.matrix.cols;
 
-    var i = 0
-    var j = 0
+    let i = 0
+    let j = 0
 
-    var coefArr = []
+    let coefArr = []
     while(i < solvedMat.rows || j < this.enabled.length-1) {
       if(this.enabled[j] == false) {
         coefArr.push(0);
@@ -23,8 +28,6 @@ module.exports = class EqSystem {
         i++;
       }
     }
-
-    console.log(coefArr);
 
     return coefArr;
   }
