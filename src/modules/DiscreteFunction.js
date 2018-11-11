@@ -1,5 +1,5 @@
 export default class DiscreteFunction {
-    
+
     constructor(points) {
         this.x = points.map(item => {
             return item[0];
