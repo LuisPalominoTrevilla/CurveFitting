@@ -17,15 +17,15 @@
                                 <b-form-group 
                                     v-for="(n, index) in polLabels" 
                                     :key="index">
-                                    <b-form-checkbox 
+                                    <b-form-checkbox
                                         v-model="polSelections[index]"
                                         :disabled="index == polSelections.length-1">
-                                        {{n}}
+                                        `{{n}}`
                                     </b-form-checkbox>
                                 </b-form-group>
                             </b-tab>
                             <b-tab title="Transcendental" @click="selectRegression(1)">
-
+                                `x^2+ln(x)`
                             </b-tab>
                             <b-tab title="Logaritmica" @click="selectRegression(2)">
                             Tab Contents 3
@@ -39,7 +39,7 @@
                         <b-button 
                             class="adjust-btn" 
                             type="submit"
-                            :disabled="!btnActive">
+                            :disabled="!btnActive || polOrder == 0">
                                 Ajustar
                             </b-button>
                     </b-form-group>
@@ -68,8 +68,15 @@ export default {
             polOrder: null,
             polLabels: [],
             polSelections: [],
-            selected: null,
-            formula: "`x^2`"
+            selected: null
+        }
+    },
+
+    updated() {
+        // eslint-disable-next-line
+        if (MathJax) {
+            // eslint-disable-next-line
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
         }
     },
 
@@ -85,9 +92,12 @@ export default {
             if (this.polOrder > 7) {
                 this.polOrder = 7;
             }
+            if (this.polOrder == 0) {
+                return;
+            }
             for (let i = 0; i <= this.polOrder; i++) {
                 this.polSelections.push(true);
-                this.polLabels.push((i > 0)? `${this.letters[this.polOrder-i]}X^${i}`:this.letters[this.polOrder-i]);
+                this.polLabels.push((i > 0)? `${this.letters[this.polOrder-i]}x^${i}`:this.letters[this.polOrder-i]);
             }
         }
     },
@@ -145,5 +155,10 @@ export default {
     .adjust-btn:hover {
         color: #ffffff !important;
         background: rgb(8, 104, 72) !important;
+    }
+
+    .adjust-btn.disabled:hover {
+        background: #ffffff !important;
+        color: rgb(8, 104, 72) !important;
     }
 </style>
