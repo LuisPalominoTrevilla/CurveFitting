@@ -5,6 +5,7 @@
         </div>
         <div class="graph">
             <div id="graph" ref="grf"></div>
+            <function :func="func"/>
         </div>
     </div>
 </template>
@@ -12,6 +13,7 @@
 <script>
 import FileUploadPanel from '@/components/FileUploadPanel.vue';
 import DiscreteFunction from '@/modules/DiscreteFunction';
+import Function from '@/components/Function.vue';
 import Interpreter from '@/modules/Interpreter';
 import { functionPlot } from '@/function.conf.js';
 import { configPlot, configPoints, configFunc, ghostFunc } from '@/graph.config.json';
@@ -21,13 +23,15 @@ export default {
     name: "graph",
 
     components: {
-        FileUploadPanel
+        FileUploadPanel,
+        Function
     },
     
     data() {
         return {
             points: null,
-            graph: ''
+            graph: '',
+            func: ''
         }
     },
 
@@ -62,35 +66,72 @@ export default {
     methods: {
 
         newRegression({ enabled, type, base, n }) {
+            let tmp = {};
             if (this.points) {
                 const interpreter = new Interpreter(this.points);
                 switch (type) {
                     case tipo.Polinomial:
-                        this.graph = interpreter.createPolinomial(enabled.length-1, enabled);
+                        tmp = interpreter.createPolinomial(enabled.length-1, enabled);
+                        if (tmp.graph) {
+                            this.graph = tmp.graph;
+                            this.func = tmp.func;
+                        }
                         break;
                     case tipo.Exponencial:
-                        this.graph = interpreter.createExponential(enabled, n);
+                        tmp = interpreter.createExponential(enabled, n);
+                        if (tmp.graph) {
+                            this.graph = tmp.graph;
+                            this.func = tmp.func;
+                        }
                         break;
                     case tipo.Trascendental:
-                        this.graph = interpreter.createTrans(enabled, n);
+                        tmp = interpreter.createTrans(enabled, n);
+                        if (tmp.graph) {
+                            this.graph = tmp.graph;
+                            this.func = tmp.func;
+                        }
                         break;
                     case tipo.Logaritmica:
-                        this.graph = interpreter.createLogarithm(enabled, type, base);
+                        tmp = interpreter.createLogarithm(enabled, type, base);
+                        if (tmp.graph) {
+                            this.graph = tmp.graph;
+                            this.func = tmp.func;
+                        }
                         break;
                     case tipo.lnx:
-                        this.graph = interpreter.createLogarithm(enabled, type);
+                        tmp = interpreter.createLogarithm(enabled, type);
+                        if (tmp.graph) {
+                            this.graph = tmp.graph;
+                            this.func = tmp.func;
+                        }
                         break;
                     case tipo.NlogN:
-                        this.graph = interpreter.createLogarithm(enabled, type, base);
+                        tmp = interpreter.createLogarithm(enabled, type, base);
+                        if (tmp.graph) {
+                            this.graph = tmp.graph;
+                            this.func = tmp.func;
+                        }
                         break;
                     case tipo.Trigonometrica1:
-                        this.graph = interpreter.createTrig(enabled, type);
+                        tmp = interpreter.createTrig(enabled, type);
+                        if (tmp.graph) {
+                            this.graph = tmp.graph;
+                            this.func = tmp.func;
+                        }
                         break;
                     case tipo.Trigonometrica2:
-                        this.graph = interpreter.createTrig(enabled, type);
+                        tmp = interpreter.createTrig(enabled, type);
+                        if (tmp.graph) {
+                            this.graph = tmp.graph;
+                            this.func = tmp.func;
+                        }
                         break;
                     case tipo.Trigonometrica3:
-                        this.graph = interpreter.createTrigComposed(enabled);
+                        tmp = interpreter.createTrigComposed(enabled);
+                        if (tmp.graph) {
+                            this.graph = tmp.graph;
+                            this.func = tmp.func;
+                        }
                         break;
 
                 }

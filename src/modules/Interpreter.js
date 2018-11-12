@@ -164,7 +164,7 @@ export default class Interpreter {
     }
     let sys = new system(objMat, enabled);
     let coefArr = sys.solveSystem();
-    let fun = "";
+    let fun = {};
     if (type == tipo.Logaritmica) {
       fun = this.gen.generateLogx(coefArr, base);
     }else if (type == tipo.lnx) {
