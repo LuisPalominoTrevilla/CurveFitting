@@ -18,6 +18,10 @@ export default class FunctionCreator {
     return `${coefArr[0]} + ${coefArr[1]}* 1/x^${n}`;
   }
 
+  generateExp(coefArr, k) {
+    return `${coefArr[0]} + ${coefArr[1]}*exp(${k}*x)`;
+  }
+
   generateLogx(coefArr, base) {
     return coefArr[0] + " + " + coefArr[1] + " * log(x)/log("+base+")";
   }

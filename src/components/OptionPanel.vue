@@ -43,7 +43,22 @@
                                 </b-form-group>
                             </b-tab>
                             <b-tab title="Exponencial `e^(kx)`" @click="selectRegression(2)">
-                            Tab Contents 3
+                                <b-form-group>
+                                    <label for="exp">k de `e^(kx)`:</label>
+                                    <b-input 
+                                        id="exp" 
+                                        v-model="n"
+                                        type="number"/>
+                                </b-form-group>
+                                <b-form-group 
+                                    v-for="(n, index) in expLabels" 
+                                    :key="index">
+                                    <b-form-checkbox
+                                        v-model="stdSelections[index]"
+                                        :disabled="index == stdSelections.length-1">
+                                        `{{n}}`
+                                    </b-form-checkbox>
+                                </b-form-group>
                             </b-tab>
                             <b-tab title="Logarítmica `log_bx`" @click="selectRegression(3)">
                                 <b-form-group>
@@ -142,6 +157,7 @@ export default {
             nlogLabels: [],
             stdSelections: [],
             transLabels: [],
+            expLabels: [],
             base: 10,
             n: 1
             
@@ -166,6 +182,7 @@ export default {
             this.logLabels.push((i > 0)? `${this.letters[this.polOrder-i]}log_bx`:this.letters[this.polOrder-i]);
             this.nlogLabels.push((i > 0)? `${this.letters[this.polOrder-i]}nlog_bn`:this.letters[this.polOrder-i]);
             this.transLabels.push((i > 0)? `${this.letters[this.polOrder-i]}1/x^n`:this.letters[this.polOrder-i]);
+            this.expLabels.push((i > 0)? `${this.letters[this.polOrder-i]}e^(kx)`:this.letters[this.polOrder-i]);
         }
     },
 
@@ -206,7 +223,14 @@ export default {
                     this.$emit('newGraph', { enabled: this.polSelections.slice(0), type: this.selected });
                     break;
                 case tipo.Trascendental:
-                    this.$emit('newGraph', { enabled: this.stdSelections.slice(0), type: this.selected, n: this.n });
+                    if (this.n > 0) {
+                        this.$emit('newGraph', { enabled: this.stdSelections.slice(0), type: this.selected, n: this.n });
+                    }
+                    break;
+                case tipo.Exponencial:
+                    if (this.n > 0) {
+                        this.$emit('newGraph', { enabled: this.stdSelections.slice(0), type: this.selected, n: this.n });
+                    }
                     break;
                 case tipo.Logaritmica:
                     if (this.base > 1) {
@@ -228,6 +252,7 @@ export default {
         selectRegression(num) {
             this.selected = num;
             this.base = 10;
+            this.n = 1;
             this.stdSelections = [];
             for (let i = 0; i < 2; i++) {
                 this.stdSelections.push(true);

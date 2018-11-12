@@ -68,6 +68,9 @@ export default {
                     case tipo.Polinomial:
                         this.graph = interpreter.createPolinomial(enabled.length-1, enabled);
                         break;
+                    case tipo.Exponencial:
+                        this.graph = interpreter.createExponential(enabled, n);
+                        break;
                     case tipo.Trascendental:
                         this.graph = interpreter.createTrans(enabled, n);
                         break;

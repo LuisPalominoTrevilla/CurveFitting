@@ -78,6 +78,41 @@ export default class Interpreter {
     return this.gen.generateTrans(coefArr, n);
   }
 
+  createExponential(enabled, k) {
+    let lnxi = [];
+    let ylnxi = [];
+    for (let i = 0; i < 3; i++) {
+      lnxi.push(0);
+      for (let j = 0; j < this.x.length; j++) {
+        lnxi[i] += Math.pow(Math.exp(k * this.x[j]), i);
+      }
+    }
+    for (let i = 0; i < 2; i++) {
+      ylnxi.push(0);
+      for (let j = 0; j < this.y.length; j++) {
+        ylnxi[i] += Math.pow(Math.exp(k * this.x[j]), i) * this.y[j];
+      }
+    }
+    // Fill matrix
+    for (let i = 0; i < 2; i++) {
+      for (let j = 0; j < 2; j++) {
+        this.mat.push(lnxi[i+j]);
+      }
+      this.mat.push(ylnxi[i]);
+    }
+    let objMat = new matrix(2, 3, this.mat);
+    objMat.printMatrix();
+    for(let i = enabled.length-1; i >= 0; i--) {
+      if(enabled[i] == false){
+        objMat.deleteRow(i);
+        objMat.deleteColumn(i);
+      }
+    }
+    let sys = new system(objMat, enabled);
+    let coefArr = sys.solveSystem();
+    return this.gen.generateExp(coefArr, k);
+  }
+
   createLogarithm(enabled, type, base = 10) {
     let lnxi = [];
     let ylnxi = [];
