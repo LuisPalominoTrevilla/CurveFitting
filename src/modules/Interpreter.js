@@ -221,6 +221,39 @@ export default class Interpreter {
     }
   }
 
+  createTrigComposed(enabled) {
+    let sinxi = [];
+    let cosxi = [];
+    let yi = 0;
+    let yisinx = 0;
+    let yicosx = 0;
+    for (let i = 0; i < 3; i++) {
+      sinxi.push(0);
+      cosxi.push(0);
+      for (let j = 0; j < this.x.length; j++) {
+          sinxi[i] += Math.pow(Math.sin(this.x[j]), i);
+          cosxi[i] += Math.pow(Math.cos(this.x[j]), i);
+      }
+    }
+    for (let j = 0; j < this.y.length; j++) {
+      yi += this.y[j];
+      yisinx += sinxi[1] * this.y[j];
+      yicosx += cosxi[1] * this.y[j];
+    }
+    // Fill matrix
+    this.mat = [this.x.length, sinxi[1], cosxi[1], yi, sinxi[1], sinxi[2], sinxi[1]*cosxi[1], yisinx, cosxi[1], sinxi[1]*cosxi[1], cosxi[2], yicosx]
+    let objMat = new matrix(3, 4, this.mat);
+    for(let i = enabled.length-1; i >= 0; i--) {
+      if(enabled[i] == false){
+        objMat.deleteRow(i);
+        objMat.deleteColumn(i);
+      }
+    }
+    let sys = new system(objMat, enabled);
+    let coefArr = sys.solveSystem();
+    return this.gen.generateCosineSine(coefArr);
+  }
+
   fillRowAndResult(i, j, x, y, mat) {
 
     for(let k = 0; k < mat.length; k++) {

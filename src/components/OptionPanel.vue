@@ -130,7 +130,15 @@
                                 </b-form-group>
                             </b-tab>
                             <b-tab title="Trigonométrica `sinx+cosx`" @click="selectRegression(8)">
-                            Tab Contents 3
+                                <b-form-group 
+                                    v-for="(n, index) in sincosLabels" 
+                                    :key="index">
+                                    <b-form-checkbox
+                                        v-model="sincosSelections[index]"
+                                        :disabled="index == sincosSelections.length-1 || index == sincosSelections.length-2">
+                                        `{{n}}`
+                                    </b-form-checkbox>
+                                </b-form-group>
                             </b-tab>
                         </b-tabs>
                     </b-card>
@@ -174,8 +182,10 @@ export default {
             sinLabels: [],
             cosLabels: [],
             stdSelections: [],
+            sincosSelections: [],
             transLabels: [],
             expLabels: [],
+            sincosLabels: [],
             base: 10,
             n: 1
             
@@ -204,6 +214,8 @@ export default {
             this.sinLabels.push((i > 0)? `${this.letters[this.polOrder-i]}sinx`:this.letters[this.polOrder-i]);
             this.cosLabels.push((i > 0)? `${this.letters[this.polOrder-i]}cosx`:this.letters[this.polOrder-i]);
         }
+        this.sincosSelections = [true, true, true];
+        this.sincosLabels = [`c`, `b*sin(x)`, `c*cos(x)`];
     },
 
     watch: {
@@ -270,6 +282,9 @@ export default {
                     break;
                 case tipo.Trigonometrica2:
                     this.$emit('newGraph', { enabled: this.stdSelections.slice(0), type: this.selected });
+                    break;
+                case tipo.Trigonometrica3:
+                    this.$emit('newGraph', { enabled: this.sincosSelections.slice(0), type: this.selected });
                     break;
             }
         },

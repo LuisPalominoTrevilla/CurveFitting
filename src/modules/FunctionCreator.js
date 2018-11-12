@@ -37,4 +37,8 @@ export default class FunctionCreator {
   generateCosine(coefArr) {
     return `${coefArr[0]} + ${coefArr[1]}*cos(x)`;
   }
+
+  generateCosineSine(coefArr) {
+    return `${coefArr[0]} + ${coefArr[1]}*sin(x) + ${coefArr[2]}*cos(x)`;
+  }
 }

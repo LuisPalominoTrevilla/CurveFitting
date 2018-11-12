@@ -89,6 +89,9 @@ export default {
                     case tipo.Trigonometrica2:
                         this.graph = interpreter.createTrig(enabled, type);
                         break;
+                    case tipo.Trigonometrica3:
+                        this.graph = interpreter.createTrigComposed(enabled);
+                        break;
 
                 }
             }
