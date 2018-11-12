@@ -83,6 +83,12 @@ export default {
                     case tipo.NlogN:
                         this.graph = interpreter.createLogarithm(enabled, type, base);
                         break;
+                    case tipo.Trigonometrica1:
+                        this.graph = interpreter.createTrig(enabled, type);
+                        break;
+                    case tipo.Trigonometrica2:
+                        this.graph = interpreter.createTrig(enabled, type);
+                        break;
 
                 }
             }

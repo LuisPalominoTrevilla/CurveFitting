@@ -29,4 +29,12 @@ export default class FunctionCreator {
   generateNLogN(coefArr, base) {
     return coefArr[0] + " + " + coefArr[1] + " * x*log(x)/log("+base+")";
   }
+
+  generateSine(coefArr) {
+    return `${coefArr[0]} + ${coefArr[1]}*sin(x)`;
+  }
+
+  generateCosine(coefArr) {
+    return `${coefArr[0]} + ${coefArr[1]}*cos(x)`;
+  }
 }

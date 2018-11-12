@@ -50,12 +50,18 @@ export default class Interpreter {
     for (let i = 0; i < 3; i++) {
       lnxi.push(0);
       for (let j = 0; j < this.x.length; j++) {
+        if (this.x[j] == 0) {
+          return null;
+        }
         lnxi[i] += 1/Math.pow(this.x[j], i*n);
       }
     }
     for (let i = 0; i < 2; i++) {
       ylnxi.push(0);
       for (let j = 0; j < this.y.length; j++) {
+        if (this.x[j] == 0) {
+          return null;
+        }
         ylnxi[i] += 1/Math.pow(this.x[j], i*n) * this.y[j];
       }
     }
@@ -101,7 +107,6 @@ export default class Interpreter {
       this.mat.push(ylnxi[i]);
     }
     let objMat = new matrix(2, 3, this.mat);
-    objMat.printMatrix();
     for(let i = enabled.length-1; i >= 0; i--) {
       if(enabled[i] == false){
         objMat.deleteRow(i);
@@ -168,6 +173,52 @@ export default class Interpreter {
       fun = this.gen.generateNLogN(coefArr, base);
     }
     return fun;
+  }
+
+  createTrig(enabled, type) {
+    let lnxi = [];
+    let ylnxi = [];
+    for (let i = 0; i < 3; i++) {
+      lnxi.push(0);
+      for (let j = 0; j < this.x.length; j++) {
+        if (type == tipo.Trigonometrica1) {
+          lnxi[i] += Math.pow(Math.sin(this.x[j]), i);
+        }else if (type == tipo.Trigonometrica2) {
+          lnxi[i] += Math.pow(Math.cos(this.x[j]), i);
+        }
+      }
+    }
+    for (let i = 0; i < 2; i++) {
+      ylnxi.push(0);
+      for (let j = 0; j < this.y.length; j++) {
+        if (type == tipo.Trigonometrica1) {
+          ylnxi[i] += Math.pow(Math.sin(this.x[j]), i) * this.y[j];
+        } else if (type == tipo.Trigonometrica2) {
+          ylnxi[i] += Math.pow(Math.cos(this.x[j]), i) * this.y[j];
+        }
+      }
+    }
+    // Fill matrix
+    for (let i = 0; i < 2; i++) {
+      for (let j = 0; j < 2; j++) {
+        this.mat.push(lnxi[i+j]);
+      }
+      this.mat.push(ylnxi[i]);
+    }
+    let objMat = new matrix(2, 3, this.mat);
+    for(let i = enabled.length-1; i >= 0; i--) {
+      if(enabled[i] == false){
+        objMat.deleteRow(i);
+        objMat.deleteColumn(i);
+      }
+    }
+    let sys = new system(objMat, enabled);
+    let coefArr = sys.solveSystem();
+    if (type == tipo.Trigonometrica1) {
+      return this.gen.generateSine(coefArr);
+    }else if (type == tipo.Trigonometrica2) {
+      return this.gen.generateCosine(coefArr);
+    }
   }
 
   fillRowAndResult(i, j, x, y, mat) {

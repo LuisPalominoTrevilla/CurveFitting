@@ -108,10 +108,26 @@
                                 </b-form-group>
                             </b-tab>
                             <b-tab title="Trigonométrica `sinx`" @click="selectRegression(6)">
-                            Tab Contents 3
+                                <b-form-group 
+                                    v-for="(n, index) in sinLabels" 
+                                    :key="index">
+                                    <b-form-checkbox
+                                        v-model="stdSelections[index]"
+                                        :disabled="index == stdSelections.length-1">
+                                        `{{n}}`
+                                    </b-form-checkbox>
+                                </b-form-group>
                             </b-tab>
                             <b-tab title="Trigonométrica `cosx`" @click="selectRegression(7)">
-                            Tab Contents 3
+                                <b-form-group 
+                                    v-for="(n, index) in cosLabels" 
+                                    :key="index">
+                                    <b-form-checkbox
+                                        v-model="stdSelections[index]"
+                                        :disabled="index == stdSelections.length-1">
+                                        `{{n}}`
+                                    </b-form-checkbox>
+                                </b-form-group>
                             </b-tab>
                             <b-tab title="Trigonométrica `sinx+cosx`" @click="selectRegression(8)">
                             Tab Contents 3
@@ -155,6 +171,8 @@ export default {
             lnLabels: [],
             logLabels: [],
             nlogLabels: [],
+            sinLabels: [],
+            cosLabels: [],
             stdSelections: [],
             transLabels: [],
             expLabels: [],
@@ -183,6 +201,8 @@ export default {
             this.nlogLabels.push((i > 0)? `${this.letters[this.polOrder-i]}nlog_bn`:this.letters[this.polOrder-i]);
             this.transLabels.push((i > 0)? `${this.letters[this.polOrder-i]}1/x^n`:this.letters[this.polOrder-i]);
             this.expLabels.push((i > 0)? `${this.letters[this.polOrder-i]}e^(kx)`:this.letters[this.polOrder-i]);
+            this.sinLabels.push((i > 0)? `${this.letters[this.polOrder-i]}sinx`:this.letters[this.polOrder-i]);
+            this.cosLabels.push((i > 0)? `${this.letters[this.polOrder-i]}cosx`:this.letters[this.polOrder-i]);
         }
     },
 
@@ -245,7 +265,12 @@ export default {
                         this.$emit('newGraph', { enabled: this.stdSelections.slice(0), type: this.selected, base: this.base });
                     }
                     break;
-
+                case tipo.Trigonometrica1:
+                    this.$emit('newGraph', { enabled: this.stdSelections.slice(0), type: this.selected });
+                    break;
+                case tipo.Trigonometrica2:
+                    this.$emit('newGraph', { enabled: this.stdSelections.slice(0), type: this.selected });
+                    break;
             }
         },
 
