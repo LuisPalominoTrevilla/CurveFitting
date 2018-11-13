@@ -1,0 +1,37 @@
+{
+    "configPlot": {
+        "target": "#graph",
+        "width": 0,
+        "height": 0,
+        "grid": true,
+        "xAxis": {
+            "label": "eje x",
+            "domain": [-1, 18]
+        },
+        "yAxis": {
+            "label": "eje y",
+            "domain": [-3, 23]
+        },
+        "data": []
+    },
+    "configPoints": {
+        "points": [],
+        "fnType": "points",
+        "graphType": "scatter",
+        "attr": {
+            "fill": "#1b6c84",
+            "stroke": "#1b6c84",
+            "r": 5,
+            "opacity": 1
+        }
+    },
+    "configFunc": {
+        "fn": "",
+        "skipTip": true
+    },
+    "ghostFunc": {
+        "fn": "0",
+        "color": "#00000000",
+        "skipTip": true
+    }
+}

@@ -2,11 +2,15 @@
   <div id="app">
     <b-container fluid class="main-container">
       <b-row>
-        <b-col md="8">
-          <graph-layout />
+        <b-col md="8" class="graph-panel">
+          <graph-layout
+            @confirmPoints="confirmPoints()"
+            ref="childGraph"/>
         </b-col>
         <b-col md="4" class="option-panel">
-          <option-panel />
+          <option-panel 
+            @newGraph="newGraph($event)"
+            :btnActive="hasPoints"/>
         </b-col>
       </b-row>
     </b-container>
@@ -19,9 +23,26 @@ import OptionPanel from '@/components/OptionPanel.vue';
 
 export default {
   name: 'app',
+
   components: {
     GraphLayout,
     OptionPanel
+  },
+
+  data() {
+    return {
+      hasPoints: false
+    }
+  },
+
+  methods: {
+    newGraph(options) {
+      this.$refs.childGraph.newRegression(options);
+    },
+
+    confirmPoints() {
+      this.hasPoints = true;
+    }
   }
 }
 </script>
@@ -44,7 +65,7 @@ export default {
   }
 
   .option-panel {
-    padding-right: 0;
+    padding: 0;
   }
 }
 </style>

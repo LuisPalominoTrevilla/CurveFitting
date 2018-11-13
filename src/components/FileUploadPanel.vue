@@ -3,7 +3,6 @@
         <b-row>
             <b-col>
                 <b-form-file v-model="file" :state="Boolean(file)" placeholder="Selecciona un archivo .txt"></b-form-file>
-                <div class="mt-3">Archivo seleccionado: {{file && file.name}}</div>
             </b-col>
         </b-row>
     </b-container>
@@ -15,13 +14,35 @@ export default {
 
     data() {
         return {
-            file: null
+            file: null,
+            reader: new FileReader()
         }
+    },
+
+    beforeMount() {
+        this.reader.onload = this.readFile;
     },
 
     watch: {
         file() {
-            console.log(this.file);
+            if (this.file && this.file.type == 'text/plain') {
+                this.reader.readAsText(this.file);
+            }
+        }
+    },
+
+    methods: {
+
+        readFile(event) {
+            let points = [];
+            const res = event.target.result.split(/\r?\n/g);
+            for (const r of res) {
+                let point = r.split(/\s/g);
+                if (point.length == 2) {
+                    points.push(point.map(val => parseFloat(val)));
+                }
+            }
+            this.$emit('assignPoints', points);
         }
     }
 }
